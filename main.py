@@ -48,8 +48,4 @@ for epoch in tqdm(range(epochs), desc="Training"):
     # Reset gradients
     opt.zero_grad()
     
-    '''if epoch % 10 ==0:
-        [w, b] = model.parameters()
-        print(f"[{epoch}] Loss: {l:.3f} w: {w[0][0].item():.3f}")'''
-    
 print(f"After training: f(5) = {model(xTest).item():.3f}")
