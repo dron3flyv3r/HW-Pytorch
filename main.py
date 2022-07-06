@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from tqdm import tqdm
 
 # The math is f(x) = x*5
 # here is a wary simple ai that will learn to predict the value of f(5), the answer to the question is 10
@@ -25,13 +26,13 @@ model = Net(input_size, output_size)
 print(f"Before training: f(5) = {model(xTest).item():.3f}")
 
 # Training loop
-lr = 0.01
-epochs = 150
+lr = 0.005
+epochs = 5000
 
 loss = nn.MSELoss()
-opt = torch.optim.Adam(model.parameters(), lr=lr)
+opt = torch.optim.SGD(model.parameters(), lr=lr)
 
-for epoch in range(epochs):
+for epoch in tqdm(range(epochs), desc="Training"):
     # Forward pass
     y_pred = model(X)
     
@@ -47,8 +48,8 @@ for epoch in range(epochs):
     # Reset gradients
     opt.zero_grad()
     
-    if epoch % 10 ==0:
+    '''if epoch % 10 ==0:
         [w, b] = model.parameters()
-        print(f"[{epoch}] Loss: {l:.3f} w: {w[0][0].item():.3f}")
+        print(f"[{epoch}] Loss: {l:.3f} w: {w[0][0].item():.3f}")'''
     
 print(f"After training: f(5) = {model(xTest).item():.3f}")
