@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 from model import Net
+import torch_optimizer as optim
 
 # The math is f(x) = x*5
 # here is a wary simple ai that will learn to predict the value of f(5), the answer to the question is 10
@@ -25,6 +26,7 @@ epochs = 5000
 
 loss = nn.MSELoss()
 opt = torch.optim.SGD(model.parameters(), lr=lr)
+#opt = optim.Apollo(model.parameters(), lr=lr)
 
 
 for __ in tqdm(range(epochs), desc="Training"):
