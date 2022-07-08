@@ -28,21 +28,25 @@ loss = nn.MSELoss()
 opt = torch.optim.SGD(model.parameters(), lr=lr)
 #opt = optim.Apollo(model.parameters(), lr=lr)
 
+pbar = tqdm(range(epochs))
 
-for __ in tqdm(range(epochs), desc="Training"):
+for epoch in pbar:
     # Forward pass
     y_pred = model(X)
     
     # Loss
-    l = loss(Y, y_pred)
+    w = loss(Y, y_pred)
     
     # Gradients = backward pass
-    l.backward() # compute gradients
+    w.backward() # compute gradients
     
     # Update weights
     opt.step()
     
     # Reset gradients
     opt.zero_grad()
+    
+    if epoch % 100 == 0:
+        pbar.set_description(f"Loss: {w.item():.8f}")
     
 print(f"After training: f(5) = {model(xTest).item():.3f}")
