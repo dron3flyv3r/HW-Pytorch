@@ -1,53 +1,54 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+import torch_optimizer as optim
 from tqdm import tqdm
 
 X = torch.tensor([[1],[2],[3],[4]], dtype=torch.float32)
-y = torch.tensor([[2], [4], [6], [8]], dtype=torch.float32)
-X_test = torch.tensor([[4]], dtype=torch.float32)
+y = torch.tensor([[6.57],[13.14],[19.71],[26.28]], dtype=torch.float32)
 
-n_sam, n_fea = X.shape
-
-print(n_sam, n_fea)
+xTest = torch.tensor([[5]], dtype=torch.float32)
 
 class Net(nn.Module):
     """Some Information about Net"""
-    """This is a way simpel linear regression model with one input and one output"""
-    def __init__(self):
+    def __init__(self, input_size, output_size):
         super(Net, self).__init__()
-        self.lr1 = nn.Linear(n_fea, 1)
+        self.lr1 = nn.Linear(input_size, output_size)
 
     def forward(self, x):
         x = self.lr1(x)
         return x
     
-model = Net()
+nSam, nFea = X.shape
+print(nSam, nFea)
 
-loss = nn.MSELoss()
-optim = torch.optim.SGD(model.parameters(), lr=0.01)
-epochs = 5000
+input_size = nFea
+output_size = nFea
+model = Net(input_size, output_size)
 
-pbar = tqdm(range(epochs))
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-2)
+#optimizer = optim.Apollo(model.parameters(), lr=1e-2)
 
-for epoch in pbar:
-    # Forward pass & Loss
-    y_pred = model(X)
-    w = loss(y_pred, y)
+pbar = tqdm(range(5000))
+
+for _ in pbar:
+    # Forward pass
+    y_pre = model(X)
+    
+    # Compute loss
+    loss = criterion(y, y_pre)
     
     # Backward pass
-    w.backward()
+    loss.backward()
     
     # Update weights
-    optim.step()
-    optim.zero_grad()
+    optimizer.step()
+    optimizer.zero_grad()
     
-    # See progress
-    if epoch % 100 == 0:
-        with torch.no_grad():
-            y_pred = model(X_test)
-            acc = torch.mean((y_pred - y)**2)
-            pbar.set_description(f"Loss: {w.item():.8f}, Acc: {acc.item():.2f}")
-
-print(f"After training: f(5) = {model(X_test).item():.3f}")
+    if _ % 100 == 0:
+        pbar.set_description(f"Loss: {loss.item():.8f}")
+        
+with torch.no_grad():
+    y_pred = model(xTest)
+    print(f"f(5) = {y_pred.item():.3f}")
+    

@@ -3,7 +3,7 @@ import torch.nn as nn
 class Net(nn.Module):
     def __init__(self, input_size, output_size):
         super(Net, self).__init__()
-        self.l1 = nn.Linear(input_size, output_size)
+        self.lr1 = nn.Linear(input_size, output_size)
     def forward(self, x):
-        x = self.l1(x)
+        x = self.lr1(x)
         return x

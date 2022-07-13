@@ -25,8 +25,8 @@ lr = 0.005
 epochs = 5000
 
 loss = nn.MSELoss()
-opt = torch.optim.SGD(model.parameters(), lr=lr)
-#opt = optim.Apollo(model.parameters(), lr=lr)
+optim = torch.optim.SGD(model.parameters(), lr=lr)
+#optim = optim.Apollo(model.parameters(), lr=lr)
 
 pbar = tqdm(range(epochs))
 
@@ -41,10 +41,10 @@ for epoch in pbar:
     w.backward() # compute gradients
     
     # Update weights
-    opt.step()
+    optim.step()
     
     # Reset gradients
-    opt.zero_grad()
+    optim.zero_grad()
     
     if epoch % 100 == 0:
         pbar.set_description(f"Loss: {w.item():.8f}")
