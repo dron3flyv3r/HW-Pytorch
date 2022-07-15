@@ -90,4 +90,3 @@ for epoch in pbar:
 
 print('Finished Training')
 print(f"Total loss: {running_loss:.5}, acc: {acc()}")
-   
