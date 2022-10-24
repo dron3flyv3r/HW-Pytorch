@@ -4,11 +4,11 @@ from tqdm import tqdm
 from model import Net
 import torch_optimizer as optim
 
-# The math is f(x) = x*5
+# The math is f(x) = x*2
 # here is a wary simple ai that will learn to predict the value of f(5), the answer to the question is 10
 
 X = torch.tensor([[1],[2],[3],[4]], dtype=torch.float32)
-Y = torch.tensor([[6.57],[13.14],[19.71],[26.28]], dtype=torch.float32)
+Y = torch.tensor([[2],[4],[6],[8]], dtype=torch.float32)
 
 xTest = torch.tensor([[5]], dtype=torch.float32)
 nSam, nFea = X.shape
@@ -24,7 +24,7 @@ print(f"Before training: f(5) = {model(xTest).item():.3f}")
 lr = 0.005
 epochs = 5000
 
-loss = nn.MSELoss()
+criterion = nn.MSELoss()
 opt = torch.optim.SGD(model.parameters(), lr=lr)
 #opt = optim.Apollo(model.parameters(), lr=lr)
 
@@ -34,10 +34,10 @@ for __ in tqdm(range(epochs), desc="Training"):
     y_pred = model(X)
     
     # Loss
-    l = loss(Y, y_pred)
+    loss = criterion(Y, y_pred)
     
     # Gradients = backward pass
-    l.backward() # compute gradients
+    loss.backward() # compute gradients
     
     # Update weights
     opt.step()
