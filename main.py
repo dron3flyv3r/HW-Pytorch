@@ -4,17 +4,19 @@ from model import Net
 from tqdm import tqdm
 
 
-lr = 0.001
-epochs = 5000
+lr = 0.01
+epochs = 7500
 
 # The math is f(x) = x*2
-# here is a wary simple ai that will learn to predict the value of f(5), the answer to the question is 10
+# Here is a wary simple ai that will learn to predict the value of f(5), the answer to the question is 10
 
 X = torch.tensor([[1],[2],[3],[4]], dtype=torch.float32)
 Y = torch.tensor([[2],[4],[6],[8]], dtype=torch.float32)
 xTest = torch.tensor([5], dtype=torch.float32)
 
-model = Net()
+model = Net(X.shape[1], 1)
+
+print("Ai before training: ", model(xTest).item())
 
 criterion = nn.MSELoss()
 opt = torch.optim.SGD(model.parameters(), lr=lr)
